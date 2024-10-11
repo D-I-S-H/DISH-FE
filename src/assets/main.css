@@ -1,0 +1,11 @@
+@import "./base.css";
+
+nav {
+  background-color: var(--navbar-bg);
+}
+.nav-link, .navbar-brand {
+  color: var(--color-light);
+}
+.nav-link:hover, .navbar-brand:hover, .nav-link:focus, .navbar-brand:focus, .nav-link:active, .navbar-brand:active {
+  color: var(--color-light-hover);
+}

@@ -1,14 +1,33 @@
-# D.I.S.H FE
-## Dining Information Served Here
+# DISH-FE
 
----
-Vue.js frontend for Dinner Information Served Here (DISH)
+Frontend for the DISH (Dining Information Served Here) project.
 
----
-### Running
+## Project Setup
 
----
+```sh
+npm install
+```
 
-### Testing
+### Compile and Hot-Reload for Development
 
----
+```sh
+npm run dev
+```
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```
