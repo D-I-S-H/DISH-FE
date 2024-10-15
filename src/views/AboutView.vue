@@ -3,7 +3,9 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">About</h5>
-        <p class="card-text">This is the about page</p>
+        <p class="card-text">
+          Dining Information Served Here (D.I.S.H) is a.... fill in later
+        </p>
       </div>
     </div>
   </div>
