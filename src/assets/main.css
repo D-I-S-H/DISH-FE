@@ -15,7 +15,7 @@
   background-color: var(--color-secondary);
   border-color: var(--color-secondary);
 }
-.btn:hover, .btn:focus, .btn:active, .btn:first-child:active {
+.btn:hover, .btn:focus, .btn:active, .btn:first-child:active, .btn.show {
   color: var(--color-light);
   background-color: var(--color-secondary-hover);
   border-color: var(--color-secondary-hover);
@@ -25,4 +25,10 @@
 }
 .hover-enlarge:hover {
   transform: scale(1.1);
+}
+.sign-in-dropdown {
+}
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-light);
 }

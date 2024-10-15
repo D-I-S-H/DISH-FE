@@ -33,15 +33,39 @@ import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free
               <FontAwesomeIcon :icon="faQuestion" />
             </router-link>
           </li>
-          <li class="nav-item ms-auto d-none d-lg-block me-3">
-            <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge">
+          <li class="nav-item ms-auto d-none d-lg-block me-3 dropdown">
+            <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge" id="sign-in-button" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon :icon="faRightToBracket" />
             </router-link>
+            <ul class="dropdown-menu dropdown-menu-end p-3 sign-in-dropdown" aria-labelledby="sign-in-button">
+              <form>
+                <div class="mb-3">
+                  <label for="username" class="form-label">Username</label>
+                  <input type="text" class="form-control" id="username" placeholder="Enter username" />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" placeholder="Enter password" />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+              </form>
+            </ul>
           </li>
           <li class="nav-item d-none d-lg-block">
-            <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge">
+            <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge" id="extra-options-button" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon :icon="faBars" />
             </router-link>
+            <ul class="dropdown-menu dropdown-menu-end p-3 sign-in-dropdown" aria-labelledby="extra-options-button">
+              <li>
+                <a href="#" class="dropdown-item">Settings</a>
+              </li>
+              <li>
+                <a href="#" class="dropdown-item">Help</a>
+              </li>
+              <li>
+                <a href="#" class="dropdown-item">Contact</a>
+              </li>
+            </ul>
           </li>
         </ul>
         <ul class="navbar-nav d-lg-none">
