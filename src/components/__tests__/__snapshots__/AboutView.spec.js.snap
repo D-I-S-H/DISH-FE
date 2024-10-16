@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Render about page > renders properly 1`] = `
+"<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">About</h5>
+      <p class="card-text"> Dining Information Served Here (D.I.S.H) provides simple and easy access to MTU's dining hall menus. </p>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`Render test > renders properly 1`] = `
+"<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">About</h5>
+      <p class="card-text"> Dining Information Served Here (D.I.S.H) provides simple and easy access to MTU's dining hall menus. </p>
+    </div>
+  </div>
+</div>"
+`;
