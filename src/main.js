@@ -5,10 +5,14 @@ import "bootstrap";
 // Custom styles
 import "./assets/main.css";
 
+// Import Vue
 import { createApp } from "vue";
 import App from "./App.vue";
-
 import { createWebHistory, createRouter } from "vue-router";
+
+// Import toasts
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
 
 // Import views
 import HomeView from './views/HomeView.vue'
@@ -37,5 +41,6 @@ router.beforeEach((to, from, next) => {
 
 
 const app = createApp(App);
-app.use(router);
+app.use(router); // Router
+app.use(ToastPlugin); // Toasts
 app.mount("#app");

@@ -28,7 +28,12 @@
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // Import the router
 
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
 const API_URL = import.meta.env.VITE_APP_API_URL;
+
+const $toast = useToast();
 
 export default {
   setup() {
@@ -61,7 +66,7 @@ export default {
         }
       } catch (error) {
         console.error('Login failed', error);
-        // TODO: Show an error message to the user using a toast
+        $toast.error('Login failed');
       }
     }
   }
