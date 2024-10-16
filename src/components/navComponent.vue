@@ -9,15 +9,23 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 const username = ref('');
 const password = ref('');
 
+/**
+ * Sign in the user using the provided username and password
+ */
 const signIn = async () => {
   try {
     const response = await axios.post(`${API_URL}/login`, {
       username: username.value,
       password: password.value
     });
-    console.log('Login successful', response.data);
+    if (response.data.token) { // If valid response, store user data and redirect to home
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      router.push('/');
+    }
   } catch (error) {
     console.error('Login failed', error);
+    // TODO: Show an error message to the user using a toast
   }
 };
 </script>
