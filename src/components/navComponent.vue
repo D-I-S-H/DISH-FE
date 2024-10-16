@@ -4,7 +4,7 @@ import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free
 import { ref } from 'vue';
 import axios from 'axios';
 
-const API_URL = import.meta.env.API_URL;
+const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const username = ref('');
 const password = ref('');
