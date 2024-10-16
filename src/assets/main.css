@@ -1,11 +1,34 @@
 @import "./base.css";
 
-nav {
+/* nav {
   background-color: var(--navbar-bg);
-}
+} */
 .nav-link, .navbar-brand {
   color: var(--color-light);
 }
 .nav-link:hover, .navbar-brand:hover, .nav-link:focus, .navbar-brand:focus, .nav-link:active, .navbar-brand:active {
   color: var(--color-light-hover);
+}
+
+.btn {
+  color: var(--color-light);
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+.btn:hover, .btn:focus, .btn:active, .btn:first-child:active, .btn.show {
+  color: var(--color-light);
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+}
+.hover-enlarge {
+  transition: transform 0.2s;
+}
+.hover-enlarge:hover {
+  transform: scale(1.1);
+}
+.sign-in-dropdown {
+}
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-light);
 }

@@ -1,0 +1,63 @@
+<template>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card p-4">
+            <div class="card-body">
+              <h5 class="card-title">Sign In</h5>
+              <form @submit.prevent="signIn">
+                <div class="form-group mb-3">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" v-model="username" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" v-model="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Sign In</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+  
+
+<script>
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_APP_API_URL;
+
+export default {
+    data() {
+        return {
+            username: '',
+            password: ''
+        };
+    },
+    methods: {
+        
+
+        /**
+         * Sign in the user using the provided username and password
+         */
+        async signIn() {
+            try {
+                const response = await axios.post(`${API_URL}/login`, {
+                    username: this.username,
+                    password: this.password
+                });
+                if (response.data.token) { // If valid response, store user data and redirect to home
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
+                    router.push('/');
+                }
+            } catch (error) {
+                console.error('Login failed', error);
+                // TODO: Show an error message to the user using a toast
+            }
+        }
+    }
+};
+</script>
