@@ -1,7 +1,25 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { ref } from 'vue';
+import axios from 'axios';
 
+const API_URL = import.meta.env.API_URL;
+
+const username = ref('');
+const password = ref('');
+
+const signIn = async () => {
+  try {
+    const response = await axios.post(`${API_URL}/login`, {
+      username: username.value,
+      password: password.value
+    });
+    console.log('Login successful', response.data);
+  } catch (error) {
+    console.error('Login failed', error);
+  }
+};
 </script>
 
 <template>
@@ -38,14 +56,14 @@ import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free
               <FontAwesomeIcon :icon="faRightToBracket" />
             </router-link>
             <ul class="dropdown-menu dropdown-menu-end p-3 sign-in-dropdown" aria-labelledby="sign-in-button">
-              <form>
+              <form @submit.prevent="signIn">
                 <div class="mb-3">
                   <label for="username" class="form-label">Username</label>
-                  <input type="text" class="form-control" id="username" placeholder="Enter username" />
+                  <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username" />
                 </div>
                 <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="password" placeholder="Enter password" />
+                  <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" />
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Sign In</button>
               </form>
