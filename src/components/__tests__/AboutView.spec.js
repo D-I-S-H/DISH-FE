@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 
 import { mount } from "@vue/test-utils";
-import HomeView from "../../views/HomeView.vue";
+import AboutView from "../../views/AboutView.vue";
 
-describe("Render home page", () => {
+describe("Render about page", () => {
   it("renders properly", () => {
-    const wrapper = mount(HomeView);
+    const wrapper = mount(AboutView);
     expect(wrapper.html()).toMatchSnapshot();
   });
 });

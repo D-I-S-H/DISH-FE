@@ -26,38 +26,44 @@
 
 <script>
 import axios from 'axios';
+import { useRouter } from 'vue-router'; // Import the router
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 
 export default {
-    data() {
-        return {
-            username: '',
-            password: ''
-        };
-    },
-    methods: {
-        
+  setup() {
+    const router = useRouter(); // Initialize the router
 
-        /**
-         * Sign in the user using the provided username and password
-         */
-        async signIn() {
-            try {
-                const response = await axios.post(`${API_URL}/login`, {
-                    username: this.username,
-                    password: this.password
-                });
-                if (response.data.token) { // If valid response, store user data and redirect to home
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('user', JSON.stringify(response.data.user));
-                    router.push('/');
-                }
-            } catch (error) {
-                console.error('Login failed', error);
-                // TODO: Show an error message to the user using a toast
-            }
+    return {
+      router
+    };
+  },
+  data() {
+    return {
+      username: '',
+      password: ''
+    };
+  },
+  methods: {
+    /**
+     * Sign in the user using the provided username and password
+     */
+    async signIn() {
+      try {
+        const response = await axios.post(`${API_URL}/login`, {
+          username: this.username,
+          password: this.password
+        });
+        if (response.data.token) { // If valid response, store user data and redirect to home
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+          this.router.push('/'); // Use this.router to navigate
         }
+      } catch (error) {
+        console.error('Login failed', error);
+        // TODO: Show an error message to the user using a toast
+      }
     }
+  }
 };
 </script>

@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const router = useRouter();
 
+
 const username = ref('');
 const password = ref('');
 const token = ref(null); // To track the token
@@ -119,7 +120,7 @@ const signIn = async () => {
             </router-link>
           </li>
           <li v-if="!token" class="nav-item">
-            <router-link to="/signin" class="nav-link">
+            <router-link to="/login" class="nav-link">
               <FontAwesomeIcon :icon="faRightToBracket" />
               Login
             </router-link>
