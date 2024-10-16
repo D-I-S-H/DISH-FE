@@ -1,13 +1,23 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
+const router = useRouter();
 
 const username = ref('');
 const password = ref('');
+const token = ref(null); // To track the token
+
+/**
+ * Check for token in localStorage when the component is mounted
+ */
+onMounted(() => {
+  token.value = localStorage.getItem('token');
+});
 
 /**
  * Sign in the user using the provided username and password
@@ -18,9 +28,10 @@ const signIn = async () => {
       username: username.value,
       password: password.value
     });
-    if (response.data.token) { // If valid response, store user data and redirect to home
+    if (response.data.token) { // If valid response, store user data and token, then redirect to home
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      token.value = response.data.token; // Update token
       router.push('/');
     }
   } catch (error) {
@@ -59,7 +70,7 @@ const signIn = async () => {
               <FontAwesomeIcon :icon="faQuestion" />
             </router-link>
           </li>
-          <li class="nav-item ms-auto d-none d-lg-block me-3 dropdown">
+          <li v-if="!token" class="nav-item ms-auto d-none d-lg-block me-3 dropdown">
             <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge" id="sign-in-button" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon :icon="faRightToBracket" />
             </router-link>
@@ -77,7 +88,7 @@ const signIn = async () => {
               </form>
             </ul>
           </li>
-          <li class="nav-item d-none d-lg-block">
+          <li class="nav-item d-none d-lg-block" :class="{ 'ms-auto': token }">
             <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge" id="extra-options-button" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon :icon="faBars" />
             </router-link>
@@ -107,7 +118,7 @@ const signIn = async () => {
               About
             </router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="!token" class="nav-item">
             <router-link to="/signin" class="nav-link">
               <FontAwesomeIcon :icon="faRightToBracket" />
               Login
