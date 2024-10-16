@@ -42,8 +42,3 @@ a.text-light:hover {
   background-color: var(--color-secondary);
   border-color: var(--color-accent);
 }
-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}

@@ -15,7 +15,7 @@
         <div class="col-md-6 text-md-end">
             <h6 class="fw-bold">Disclaimer</h6>
             <p class="mb-3">Dining Information Served Here (DISH) is still in early development and may have bugs.</p>
-            <router-link to="/" class="text-light">Privacy Policy</router-link>
+            <router-link to="/privacy" class="text-light">Privacy Policy</router-link>
         </div>
         </div>
     </div>

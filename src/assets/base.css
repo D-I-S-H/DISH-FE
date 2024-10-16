@@ -32,6 +32,7 @@
     --bs-nav-link-color: var(--color-light);
     --bs-nav-link-hover-color: var(--color-primary);
     --navbar-bg: var(--color-dark-items);
+    --bs-secondary-color: var(--color-accent);
   }
 }
 @media (prefers-color-scheme: light) {
