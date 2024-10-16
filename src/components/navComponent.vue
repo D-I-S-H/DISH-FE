@@ -4,10 +4,12 @@ import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-
+import {useToast} from 'vue-toast-notification';
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const router = useRouter();
 
+const $toast = useToast();
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const username = ref('');
 const password = ref('');
@@ -37,7 +39,7 @@ const signIn = async () => {
     }
   } catch (error) {
     console.error('Login failed', error);
-    // TODO: Show an error message to the user using a toast
+    $toast.error('Login failed');
   }
 };
 </script>
