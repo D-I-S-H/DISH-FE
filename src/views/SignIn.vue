@@ -1,23 +1,28 @@
 <template>
     <div class="container mt-5">
-        <div class="card w-25 mx-auto">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card p-4">
             <div class="card-body">
-                <h5 class="card-title">Sign In</h5>
-                <form @submit.prevent="signIn">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" v-model="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" v-model="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3">Sign In</button>
-                </form>
+              <h5 class="card-title">Sign In</h5>
+              <form @submit.prevent="signIn">
+                <div class="form-group mb-3">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" v-model="username" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" v-model="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Sign In</button>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 </template>
+  
 
 <script>
 import axios from 'axios';

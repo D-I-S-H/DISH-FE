@@ -100,10 +100,10 @@ const signIn = async () => {
             </router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <router-link to="/signin" class="nav-link">
               <FontAwesomeIcon :icon="faRightToBracket" />
               Login
-            </a>
+            </router-link>
           </li>
         </ul>
       </div>
