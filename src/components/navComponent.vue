@@ -13,13 +13,13 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 
 const username = ref('');
 const password = ref('');
-const token = ref(null); // To track the token
+const uid = ref(null); // To track the uid
 
 /**
- * Check for token in localStorage when the component is mounted
+ * Check for uid in localStorage when the component is mounted
  */
 onMounted(() => {
-  token.value = localStorage.getItem('token');
+  uid.value = localStorage.getItem('uid');
 });
 
 /**
@@ -31,10 +31,10 @@ const signIn = async () => {
       username: username.value,
       password: password.value
     });
-    if (response.data.token) { // If valid response, store user data and token, then redirect to home
-      localStorage.setItem('token', response.data.token);
+    if (response.data.uid) { // If valid response, store user data and uid, then redirect to home
+      localStorage.setItem('uid', response.data.uid);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      token.value = response.data.token; // Update token
+      uid.value = response.data.uid; // Update uid
       router.push('/');
     }
   } catch (error) {
@@ -73,7 +73,7 @@ const signIn = async () => {
               <FontAwesomeIcon :icon="faQuestion" />
             </router-link>
           </li>
-          <li v-if="!token" class="nav-item ms-auto d-none d-lg-block me-3 dropdown">
+          <li v-if="!uid" class="nav-item ms-auto d-none d-lg-block me-3 dropdown">
             <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge" id="sign-in-button" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon :icon="faRightToBracket" />
             </router-link>
@@ -91,7 +91,7 @@ const signIn = async () => {
               </form>
             </ul>
           </li>
-          <li class="nav-item d-none d-lg-block" :class="{ 'ms-auto': token }">
+          <li class="nav-item d-none d-lg-block" :class="{ 'ms-auto': uid }">
             <router-link to="/" class="btn btn-primary rounded-circle hover-enlarge" id="extra-options-button" data-bs-toggle="dropdown" aria-expanded="false">
               <FontAwesomeIcon :icon="faBars" />
             </router-link>
@@ -121,7 +121,7 @@ const signIn = async () => {
               About
             </router-link>
           </li>
-          <li v-if="!token" class="nav-item">
+          <li v-if="!uid" class="nav-item">
             <router-link to="/login" class="nav-link">
               <FontAwesomeIcon :icon="faRightToBracket" />
               Login

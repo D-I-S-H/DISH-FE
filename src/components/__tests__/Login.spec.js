@@ -37,7 +37,7 @@ describe('Login.vue', () => {
   });
 
   it('calls the signIn method on form submission', async () => {
-    const mockResponse = { data: { token: 'fake-token', user: { name: 'Test User' } } };
+    const mockResponse = { data: { uid: 1, user: { name: 'Test User' } } };
     axios.post.mockResolvedValueOnce(mockResponse);
 
     const wrapper = mount(Login, {
@@ -59,8 +59,8 @@ describe('Login.vue', () => {
       password: 'password123',
     });
 
-    // Assert token is stored in localStorage
-    expect(localStorage.getItem('token')).toBe('fake-token');
+    // Assert uid is stored in localStorage
+    expect(localStorage.getItem('uid')).toBe("1");
     expect(localStorage.getItem('user')).toBe(JSON.stringify(mockResponse.data.user));
 
     // Check if router.push was called to redirect
@@ -89,7 +89,7 @@ describe('Login.vue', () => {
       password: 'wrongpassword',
     });
 
-    // Check that no token is stored in localStorage
-    expect(localStorage.getItem('token')).toBeNull();
+    // Check that no uid is stored in localStorage
+    expect(localStorage.getItem('uid')).toBeNull();
   });
 });

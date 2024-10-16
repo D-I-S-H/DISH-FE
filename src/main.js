@@ -19,6 +19,7 @@ import HomeView from './views/HomeView.vue'
 import AboutView from "./views/AboutView.vue";
 import NotFound from "./views/NotFound.vue";
 import Login from "./views/Login.vue";
+import Register from "./views/Register.vue";
 import PrivacyPolicy from "./views/PrivacyPolicy.vue";
 
 // Routes
@@ -26,6 +27,7 @@ export const routes = [
   { name: "Home", path: "/", component: HomeView }, // Home page
   { name: "About", path: "/about", component: AboutView }, // About page
   {name: "Sign In", path: "/login", component: Login}, // Sign In page
+  {name: "Register", path: "/register", component: Register}, // Register page
   {name: "Privacy Policy", path: "/privacy", component: PrivacyPolicy}, // Privacy Policy page
   { name: "404 - Page not found", path: '/404', component: NotFound }, // 404 page
   { path: '/:catchAll(.*)', redirect: '/404' }, // Catch all redirect to 404
