@@ -34,7 +34,7 @@ describe('navComponent.vue', () => {
     expect(wrapper.find('a.navbar-brand').text()).toBe('D.I.S.H');
   });
 
-  it('shows login form when token is not present', async () => {
+  it('shows login form when uid is not present', async () => {
     const wrapper = mount(Navbar, {
       global: {
         plugins: [router],
@@ -49,7 +49,7 @@ describe('navComponent.vue', () => {
   });
 
   it('calls signIn function on form submission', async () => {
-    const mockResponse = { data: { token: 'fake-token', user: { name: 'Test User' } } };
+    const mockResponse = { data: { uid: 1, user: { name: 'Test User' } } };
     axios.post.mockResolvedValueOnce(mockResponse);
 
     const wrapper = mount(Navbar, {
@@ -73,13 +73,13 @@ describe('navComponent.vue', () => {
       password: 'password123',
     });
 
-    // Assert token is stored in localStorage
-    expect(localStorage.getItem('token')).toBe('fake-token');
+    // Assert uid is stored in localStorage
+    expect(localStorage.getItem('uid')).equals("1");
     expect(localStorage.getItem('user')).toBe(JSON.stringify(mockResponse.data.user));
   });
 
-  it('hides login form when token is present', async () => {
-    localStorage.setItem('token', 'fake-token');
+  it('hides login form when uid is present', async () => {
+    localStorage.setItem('uid', 1);
   
     const wrapper = mount(Navbar, {
       global: {
