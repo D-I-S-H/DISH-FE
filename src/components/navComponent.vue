@@ -55,7 +55,7 @@ const signOut = () => {
   localStorage.removeItem('uid');
   localStorage.removeItem('user');
   uid.value = null;
-  router.push('/login'); // Redirect to login page after sign-out
+  router.push('/');
   $toast.success('Logged out successfully');
 };
 </script>

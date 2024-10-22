@@ -87,6 +87,9 @@ export default {
             case 409:
               $toast.error('Username already exists');
               break;
+            case 400:
+              $toast.error('Invalid username or password');
+              break;
             default:
               $toast.error('Registration failed');
               break;
@@ -101,6 +104,9 @@ export default {
               break;
             case 500:
               $toast.error('Internal server error');
+              break;
+            case 400:
+              $toast.error('Invalid username or password');
               break;
             default:
               $toast.error('Registration failed');
