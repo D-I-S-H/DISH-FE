@@ -55,7 +55,7 @@ export default {
      */
     async signIn() {
       try {
-        const response = await axios.post(`${API_URL}/login`, {
+        const response = await axios.post(`${API_URL}/auth/login`, {
           username: this.username,
           password: this.password
         });

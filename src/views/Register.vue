@@ -18,7 +18,7 @@
                   <label for="confirm-password">Confirm Password</label>
                   <input type="password" class="form-control" id="confirm-password" v-model="confirmPassword" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 mt-3">Sign In</button>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
               </form>
             </div>
           </div>
@@ -31,18 +31,16 @@
 <script>
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // Import the router
-
-import {useToast} from 'vue-toast-notification';
+import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
+const API_URL = import.meta.env.VITE_APP_API_URL; // Ensure this is correctly set
 
 const $toast = useToast();
 
 export default {
   setup() {
     const router = useRouter(); // Initialize the router
-
     return {
       router
     };
@@ -50,33 +48,66 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      confirmPassword: '' // Add confirmPassword to data
     };
   },
   methods: {
     /**
-     * Sign in the user using the provided username and password
+     * Register the user using the provided username and password, send as JSON
      */
     async register() {
       try {
-        if(this.password !== this.confirmPassword){
+        // Check if passwords match
+        if (this.password !== this.confirmPassword) {
           $toast.error('Passwords do not match');
           return;
         }
-        const response = await axios.post(`${API_URL}/register`, {
+
+        console.log(this.username, this.password); // Debugging log
+
+        // Make the API request to register, sending JSON data
+        const response = await axios.post(`${API_URL}/auth/register`, {
           username: this.username,
           password: this.password
+        }, {
+          headers: {
+            'Content-Type': 'application/json' // Explicitly set Content-Type to JSON
+          }
         });
-        if (response.data.uid) { // If valid response, store user data and redirect to home
+
+        // If the registration is successful
+        if (response.data.uid) {
           localStorage.setItem('uid', response.data.uid);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-          this.router.push('/'); // Use this.router to navigate
+          localStorage.setItem('user', JSON.stringify(response.data)); // Store user data
+          this.router.push('/'); // Navigate to home after registration
+          $toast.success('Registration successful');
         } else {
-          $toast.error('Register failed');
+          switch (response.status) { // Handle different HTTP status codes
+            case 409:
+              $toast.error('Username already exists');
+              break;
+            default:
+              $toast.error('Registration failed');
+              break;
+          }
         }
       } catch (error) {
-        console.error('Register failed', error);
-        $toast.error('Register failed');
+        console.error('Register failed', error); // More detailed error log
+        if (error.response) {
+          switch (error.response.status) { // Handle different errors from the server
+            case 409:
+              $toast.error('Username already exists');
+              break;
+            case 500:
+              $toast.error('Internal server error');
+              break;
+            default:
+              $toast.error('Registration failed');
+          }
+        } else {
+          $toast.error('Network error or API not reachable');
+        }
       }
     }
   }

@@ -27,7 +27,7 @@ onMounted(() => {
  */
 const signIn = async () => {
   try {
-    const response = await axios.post(`${API_URL}/login`, {
+    const response = await axios.post(`${API_URL}/auth/login`, {
       username: username.value,
       password: password.value
     });
