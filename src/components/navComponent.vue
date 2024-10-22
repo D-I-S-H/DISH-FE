@@ -1,25 +1,26 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faBars, faHouse, faQuestion, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faHouse, faQuestion, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'; // Added sign out icon
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import {useToast} from 'vue-toast-notification';
-const API_URL = import.meta.env.VITE_APP_API_URL;
-const router = useRouter();
-
-const $toast = useToast();
+import { useToast } from 'vue-toast-notification'; 
 import 'vue-toast-notification/dist/theme-sugar.css';
 
+const API_URL = import.meta.env.VITE_APP_API_URL;
+const router = useRouter();
+const $toast = useToast();
+
+// Icons
 const username = ref('');
 const password = ref('');
-const uid = ref(null); // To track the uid
+const uid = ref(null); // To track the user's uid
 
 /**
  * Check for uid in localStorage when the component is mounted
  */
 onMounted(() => {
-  uid.value = localStorage.getItem('uid');
+  uid.value = localStorage.getItem('uid'); // Retrieve and set the uid
 });
 
 /**
@@ -31,16 +32,31 @@ const signIn = async () => {
       username: username.value,
       password: password.value
     });
+
     if (response.data.uid) { // If valid response, store user data and uid, then redirect to home
       localStorage.setItem('uid', response.data.uid);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      uid.value = response.data.uid; // Update uid
-      router.push('/');
+      localStorage.setItem('user', JSON.stringify(response.data)); // Store the whole user data
+      uid.value = response.data.uid; // Update uid in the navbar
+      router.push('/'); // Navigate to home after login
+      $toast.success('Login successful');
+    } else {
+      $toast.error('Login failed');
     }
   } catch (error) {
     console.error('Login failed', error);
     $toast.error('Login failed');
   }
+};
+
+/**
+ * Sign out the user
+ */
+const signOut = () => {
+  localStorage.removeItem('uid');
+  localStorage.removeItem('user');
+  uid.value = null;
+  router.push('/login'); // Redirect to login page after sign-out
+  $toast.success('Logged out successfully');
 };
 </script>
 
@@ -105,6 +121,9 @@ const signIn = async () => {
               <li>
                 <a href="#" class="dropdown-item">Contact</a>
               </li>
+              <li v-if="uid">
+                <a href="#" class="dropdown-item" @click="signOut">Sign Out</a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -126,6 +145,12 @@ const signIn = async () => {
               <FontAwesomeIcon :icon="faRightToBracket" />
               Login
             </router-link>
+          </li>
+          <li v-if="uid" class="nav-item">
+            <a href="#" class="nav-link" @click="signOut">
+              <FontAwesomeIcon :icon="faRightFromBracket" />
+              Sign Out
+            </a>
           </li>
         </ul>
       </div>
