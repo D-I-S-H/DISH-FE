@@ -30,7 +30,7 @@ import { useRouter } from 'vue-router'; // Import the router
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
-const API_URL = import.meta.env.VITE_APP_API_URL; // Ensure this is set in your environment variables
+const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const $toast = useToast();
 

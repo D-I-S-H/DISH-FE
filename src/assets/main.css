@@ -46,4 +46,5 @@ a.text-light:hover {
 .button-location:hover {
   background-color: var(--color-secondary);
   color: var(--color-light);
+  cursor: pointer;
 }

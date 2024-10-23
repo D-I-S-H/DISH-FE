@@ -34,7 +34,7 @@ import { useRouter } from 'vue-router'; // Import the router
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
-const API_URL = import.meta.env.VITE_APP_API_URL; // Ensure this is correctly set
+const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const $toast = useToast();
 
@@ -64,7 +64,7 @@ export default {
           return;
         }
 
-        // Make the API request to register, sending JSON data
+        // API request to register
         const response = await axios.post(`${API_URL}/auth/register`, {
           username: this.username,
           password: this.password

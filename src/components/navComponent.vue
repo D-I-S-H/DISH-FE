@@ -26,25 +26,42 @@ onMounted(() => {
 /**
  * Sign in the user using the provided username and password
  */
-const signIn = async () => {
+ const signIn = async () => {
+
   try {
     const response = await axios.post(`${API_URL}/auth/login`, {
       username: username.value,
       password: password.value
     });
 
-    if (response.data.uid) { // If valid response, store user data and uid, then redirect to home
+    // Check if the response contains the user ID
+    if (response.data.uid) {
       localStorage.setItem('uid', response.data.uid);
       localStorage.setItem('user', JSON.stringify(response.data)); // Store the whole user data
-      uid.value = response.data.uid; // Update uid in the navbar
+      uid.value = response.data.uid; // Set the uid
       router.push('/'); // Navigate to home after login
       $toast.success('Login successful');
     } else {
       $toast.error('Login failed');
     }
   } catch (error) {
-    console.error('Login failed', error);
-    $toast.error('Login failed');
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          $toast.error('Login failed: Incorrect username or password');
+          break;
+        case 500:
+          $toast.error('Server error: Please try again later');
+          break;
+        default:
+          $toast.error('Login failed: Unknown error');
+      }
+    } else {
+      // Network or other errors
+      $toast.error('Network error: Please check your connection');
+    }
+
+    console.error('Login failed:', error);
   }
 };
 

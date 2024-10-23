@@ -1,12 +1,29 @@
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+const API_URL = import.meta.env.VITE_APP_API_URL;
+const $toast = useToast();
 
-const locations = ["Wadsworth", "DHH", "Place"]; // Temporary list of locations until we fetch from API
-const selectedLocation = ref(locations[0]);
+const locations = ref([]);
 
-const changeLocation = (location) => {
+// Fetch locations from the API
+axios.get(`${API_URL}/locations`)
+  .then(response => {
+    locations.value = response.data;
+  })
+  .catch(error => {
+    console.error('Error fetching locations:', error);
+    $toast.error('Error fetching locations');
+  });
+
+// Selected location
+const selectedLocation = ref(localStorage.getItem('selectedLocation') || locations.value[0]);
+
+const changeLocation = (location) => { // Update the selected location
   selectedLocation.value = location;
-  console.log('Selected location:', location);
+  localStorage.setItem('selectedLocation', location);
 }
 </script>
 
@@ -52,7 +69,7 @@ export default {
 
   methods: {
     changeLocation(location) {
-      this.selectedLocation = location;
+      selectedLocation = location;
       console.log('Selected location:', location); // Debug
     }
   }
