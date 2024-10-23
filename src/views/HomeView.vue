@@ -20,7 +20,6 @@ axios.get(`${API_URL}/locations`)
 
 // Selected location
 const selectedLocation = ref(localStorage.getItem('selectedLocation') || locations.value[0]);
-
 const changeLocation = (location) => { // Update the selected location
   selectedLocation.value = location;
   localStorage.setItem('selectedLocation', location);
