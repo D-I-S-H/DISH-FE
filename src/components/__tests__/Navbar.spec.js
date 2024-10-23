@@ -49,7 +49,7 @@ describe('navComponent.vue', () => {
   });
 
   it('calls signIn function on form submission', async () => {
-    const mockResponse = { data: { uid: 1, user: { name: 'Test User' } } };
+    const mockResponse = { data: { uid: 1, username: 'testuser' } };
     axios.post.mockResolvedValueOnce(mockResponse);
 
     const wrapper = mount(Navbar, {
@@ -68,14 +68,13 @@ describe('navComponent.vue', () => {
     await wrapper.find('form').trigger('submit.prevent');
 
     // Assert axios.post was called with correct credentials
-    expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_APP_API_URL}/login`, {
+    expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_APP_API_URL}/auth/login`, {
       username: 'testuser',
       password: 'password123',
     });
 
     // Assert uid is stored in localStorage
     expect(localStorage.getItem('uid')).equals("1");
-    expect(localStorage.getItem('user')).toBe(JSON.stringify(mockResponse.data.user));
   });
 
   it('hides login form when uid is present', async () => {

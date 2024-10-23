@@ -16,6 +16,9 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100 mt-3">Sign In</button>
               </form>
+              <p class="text-center mt-3">
+                Don't have an account? <router-link to="/register">Register</router-link>
+              </p>
             </div>
           </div>
         </div>
@@ -27,8 +30,7 @@
 <script>
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // Import the router
-
-import {useToast} from 'vue-toast-notification';
+import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
@@ -46,7 +48,8 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      loading: false // Add loading state for UX improvement
     };
   },
   methods: {
@@ -54,21 +57,46 @@ export default {
      * Sign in the user using the provided username and password
      */
     async signIn() {
+      // Start loading
+      this.loading = true;
+
       try {
-        const response = await axios.post(`${API_URL}/login`, {
+        // Make the API request to sign in
+        const response = await axios.post(`${API_URL}/auth/login`, {
           username: this.username,
           password: this.password
         });
-        if (response.data.uid) { // If valid response, store user data and redirect to home
+
+        // Check if the response contains the user ID
+        if (response.data.uid) {
           localStorage.setItem('uid', response.data.uid);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-          this.router.push('/'); // Use this.router to navigate
+          localStorage.setItem('user', JSON.stringify(response.data)); // Store the whole user data
+          router.push('/'); // Navigate to home after login
+          $toast.success('Login successful');
         } else {
-          $toast.error('Login failed');
+          $toast.error('Login failed: Invalid credentials');
         }
       } catch (error) {
-        console.error('Login failed', error);
-        $toast.error('Login failed');
+        if (error.response) {
+          switch (error.response.status) {
+            case 401:
+              $toast.error('Login failed: Incorrect username or password');
+              break;
+            case 500:
+              $toast.error('Server error: Please try again later');
+              break;
+            default:
+              $toast.error('Login failed: Unknown error');
+          }
+        } else {
+          // Network or other errors
+          $toast.error('Network error: Please check your connection');
+        }
+
+        console.error('Login failed:', error);
+      } finally {
+        // Stop loading
+        this.loading = false;
       }
     }
   }
