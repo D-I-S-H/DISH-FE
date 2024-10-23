@@ -64,8 +64,6 @@ export default {
           return;
         }
 
-        console.log(this.username, this.password); // Debugging log
-
         // Make the API request to register, sending JSON data
         const response = await axios.post(`${API_URL}/auth/register`, {
           username: this.username,
