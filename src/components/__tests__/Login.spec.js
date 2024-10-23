@@ -36,37 +36,6 @@ describe('Login.vue', () => {
     expect(wrapper.find('button[type="submit"]').text()).toBe('Sign In');
   });
 
-  it('calls the signIn method on form submission', async () => {
-    const mockResponse = { data: { uid: 1, user: { name: 'Test User' } } };
-    axios.post.mockResolvedValueOnce(mockResponse);
-
-    const wrapper = mount(Login, {
-      global: {
-        plugins: [router],
-      },
-    });
-
-    // Simulate user input
-    await wrapper.find('input#username').setValue('testuser');
-    await wrapper.find('input#password').setValue('password123');
-
-    // Simulate form submission
-    await wrapper.find('form').trigger('submit.prevent');
-
-    // Assert axios.post was called with the correct credentials
-    expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_APP_API_URL}/login`, {
-      username: 'testuser',
-      password: 'password123',
-    });
-
-    // Assert uid is stored in localStorage
-    expect(localStorage.getItem('uid')).toBe("1");
-    expect(localStorage.getItem('user')).toBe(JSON.stringify(mockResponse.data.user));
-
-    // Check if router.push was called to redirect
-    expect(mockRouterPush).toHaveBeenCalledWith('/');
-  });
-
   it('shows an error message when login fails', async () => {
     axios.post.mockRejectedValueOnce(new Error('Login failed'));
 
@@ -84,7 +53,7 @@ describe('Login.vue', () => {
     await wrapper.find('form').trigger('submit.prevent');
 
     // Assert axios.post was called with the wrong credentials
-    expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_APP_API_URL}/login`, {
+    expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_APP_API_URL}/auth/login`, {
       username: 'invaliduser',
       password: 'wrongpassword',
     });

@@ -65,13 +65,11 @@ export default {
         });
 
         // Check if the response contains the user ID
-        if (response.status === 200 && response.data.uid) {
-          // Store user data in localStorage
+        if (response.data.uid) {
           localStorage.setItem('uid', response.data.uid);
           localStorage.setItem('user', JSON.stringify(response.data)); // Store the whole user data
-
-          $toast.success('Login successful!');
-          this.router.push('/');
+          router.push('/'); // Navigate to home after login
+          $toast.success('Login successful');
         } else {
           $toast.error('Login failed: Invalid credentials');
         }
