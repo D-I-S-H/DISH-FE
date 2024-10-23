@@ -9,6 +9,10 @@
 .nav-link:hover, .navbar-brand:hover, .nav-link:focus, .navbar-brand:focus, .nav-link:active, .navbar-brand:active {
   color: var(--color-light-hover);
 }
+.navbar-toggler {
+  color: var(--color-light);
+  border-color: var(--color-secondary);
+}
 .border-dark {
   border-color: var(--color-secondary)!important;
 }

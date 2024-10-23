@@ -141,6 +141,9 @@ const signOut = () => {
               <li v-if="uid">
                 <a href="#" class="dropdown-item" @click="signOut">Sign Out</a>
               </li>
+              <li v-else>
+                <router-link to="/register" class="dropdown-item">Register</router-link>
+              </li>
             </ul>
           </li>
         </ul>

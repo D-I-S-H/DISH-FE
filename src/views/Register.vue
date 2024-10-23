@@ -20,6 +20,9 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
               </form>
+              <p class="text-center mt-3">
+                Already have an account? <router-link to="/login">Sign In</router-link>
+              </p>
             </div>
           </div>
         </div>
