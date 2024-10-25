@@ -3,10 +3,11 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import MenuItemComponent from '../components/menuItemComponent.vue';
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const $toast = useToast();
-
-const locations = ref([]);
+const menuItems = ref([]); // Menu items
+const locations = ref([]); // Locations
 
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
@@ -23,7 +24,27 @@ const selectedLocation = ref(localStorage.getItem('selectedLocation') || locatio
 const changeLocation = (location) => { // Update the selected location
   selectedLocation.value = location;
   localStorage.setItem('selectedLocation', location);
+  // Fetch menu items for the selected location
+  axios.get(`${API_URL}/menu?location=${location}`)
+    .then(response => {
+      menuItems.value = response.data;
+    })
+    .catch(error => {
+      console.error('Error fetching menu items:', error);
+      $toast.error('Error fetching menu items');
+    });
 }
+
+// Get menu items from API
+axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
+  .then(response => {
+    menuItems.value = response.data;
+  })
+  .catch(error => {
+    console.error('Error fetching menu items:', error);
+    $toast.error('Error fetching menu items');
+  });
+
 </script>
 
 <template>
@@ -34,6 +55,15 @@ const changeLocation = (location) => { // Update the selected location
           <div class="card-body">
             <h5 class="card-title">Menu</h5>
             <p class="card-text">Select a menu item to view more details.</p>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              <div 
+                v-for="menuItem in menuItems" 
+                :key="menuItem.id" 
+                class="col"
+              >
+                <MenuItemComponent :menuItem="menuItem" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
