@@ -96,6 +96,36 @@ const toggleModal = () => {
                         </div>
                     </div>
                 </div>
+                <div class="modal-body">
+                    <div class="accordion" id="AllergensAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button 
+                                class="accordion-button" 
+                                type="button" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#collapseThree" 
+                                aria-expanded="false" 
+                                aria-controls="collapseThree">
+                                Allergens
+                                </button>
+                            </h2>
+                            <div 
+                                id="collapseThree" 
+                                class="accordion-collapse collapse" 
+                                aria-labelledby="headingThree" 
+                                data-bs-parent="#AllergensAccordion">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li v-for="allergen in menuItem.allergens" :key="allergen">
+                                            {{ allergen }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="toggleModal">Close</button>
                 </div>
