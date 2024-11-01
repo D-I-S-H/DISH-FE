@@ -55,7 +55,8 @@ const toggleModal = () => {
                                 <div class="accordion-body">
                                     <ul>
                                         <li v-for="(nutrient, index) in menuItem.nutrients" :key="index">
-                                            {{ nutrient.name }}: {{ nutrient.value }}{{ nutrient.uom }}
+                                            {{ nutrient.name }}: {{ nutrient.value }}
+                                            <span v-if="nutrient.value !== 'less than 1 gram'">{{ nutrient.uom }}</span>
                                         </li>
                                     </ul>
                                 </div>
