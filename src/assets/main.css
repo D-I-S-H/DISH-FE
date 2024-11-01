@@ -63,3 +63,7 @@ a.text-light:hover {
 .menu-item:hover {
   background-color: var(--color-secondary);
 }
+
+.modal {
+  --bs-modal-bg: var(--modal-bg);
+}
