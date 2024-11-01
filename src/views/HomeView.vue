@@ -1,14 +1,19 @@
 <script setup>
-import { ref, toRaw } from 'vue';
+import { ref, toRaw, computed } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import MenuItemComponent from '../components/menuItemComponent.vue';
+
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const $toast = useToast();
-const menuItems = ref([]); // Menu items
+
+const menuItems = ref([]); // All menu items fetched from the API
 const locations = ref([]); // Locations
 const times = ref([]); // Times
+
+const selectedLocation = ref(localStorage.getItem('selectedLocation') || locations.value[0]);
+const selectedTime = ref(null); // Selected time
 
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
@@ -21,14 +26,27 @@ axios.get(`${API_URL}/locations`)
   });
 
 // Selected location
-const selectedLocation = ref(localStorage.getItem('selectedLocation') || locations.value[0]);
-const changeLocation = (location) => { // Update the selected location
+const changeLocation = (location) => {
   selectedLocation.value = location;
   localStorage.setItem('selectedLocation', location);
+
   // Fetch menu items for the selected location
   axios.get(`${API_URL}/menu?location=${location}`)
     .then(response => {
       menuItems.value = response.data;
+
+      // Set times from response data and default selectedTime
+      times.value = response.data.reduce((acc, item) => {
+        if (!acc.includes(item.time)) {
+          acc.push(item.time);
+        }
+        return acc;
+      }, []);
+      
+      // Set selectedTime to the first time in the array if available
+      if (times.value.length > 0) {
+        selectedTime.value = times.value[0];
+      }
     })
     .catch(error => {
       console.error('Error fetching menu items:', error);
@@ -36,7 +54,7 @@ const changeLocation = (location) => { // Update the selected location
     });
 }
 
-// Get menu items from API
+// Fetch menu items for the initially selected location
 axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
   .then(response => {
     menuItems.value = response.data;
@@ -48,19 +66,26 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
       }
       return acc;
     }, []);
+    
+    // Set selectedTime to the first time in the array if available
+    if (times.value.length > 0) {
+      selectedTime.value = times.value[0];
+    }
   })
   .catch(error => {
     console.error('Error fetching menu items:', error);
     $toast.error('Error fetching menu items');
   });
 
-  // Selected time
+// Change selected time
+const changeTime = (time) => {
+  selectedTime.value = time;
+};
 
-
-  console.log('Menu items:', toRaw(menuItems)); // Debug
-  console.log('Locations:', toRaw(locations)); // Debug
-  console.log('Selected location:', selectedLocation.value); // Debug
-  console.log('Times', toRaw(times)); // Debug
+// Filter menu items
+const filteredMenuItems = computed(() => {
+  return menuItems.value.filter(item => item.time === selectedTime.value);
+});
 
 </script>
 
@@ -74,8 +99,9 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
               <button 
                 v-for="time in times" 
                 :key="time" 
-                class="btn btn-primary"
-                @click="changeTime"
+                class="btn" 
+                :class="{'btn-primary': time === selectedTime, 'btn-secondary': time !== selectedTime}"
+                @click="changeTime(time)"
               >
                 {{ time }}
               </button>
@@ -88,7 +114,7 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
             <p class="card-text">Select a menu item to view more details.</p>
             <div class="row row-cols-1 row-cols-md-2 g-4">
               <div 
-                v-for="menuItem in menuItems" 
+                v-for="menuItem in filteredMenuItems" 
                 :key="menuItem.id" 
                 class="col"
               >
@@ -107,7 +133,7 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
               <li 
                 v-for="location in locations" 
                 :key="location" 
-                :class="['list-group-item', 'button-location', {'active': selectedLocation === location}]"
+                :class="['list-group-item', 'button-location', {'active': selectedLocation.value === location}]"
                 @click="changeLocation(location)"
               >
                 {{ location }}
@@ -124,13 +150,16 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
 export default {
   name: 'HomeView',
   setup() {
-    return { locations, selectedLocation, changeLocation };
-  },
-
-  methods: {
-    changeLocation(location) {
-      selectedLocation = location;
-    }
+    return { 
+      locations, 
+      selectedLocation, 
+      changeLocation, 
+      menuItems, 
+      times, 
+      selectedTime, 
+      changeTime, 
+      filteredMenuItems 
+    };
   }
-}
+};
 </script>
