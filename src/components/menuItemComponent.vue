@@ -14,7 +14,6 @@ const toggleModal = () => {
     showModal.value = !showModal.value;
 };
 </script>
-
 <template>
     <div class="card menu-item" @click="toggleModal">
         <div class="card-body">
@@ -55,9 +54,8 @@ const toggleModal = () => {
                                 data-bs-parent="#nutritionAccordion">
                                 <div class="accordion-body">
                                     <ul>
-                                        <li>Calories: {{ menuItem.calories }}</li>
-                                        <li v-for="[name, value] in Object.entries(menuItem.nutrients)" :key="name">
-                                        {{ name }}: {{ value }}
+                                        <li v-for="(nutrient, index) in menuItem.nutrients" :key="index">
+                                            {{ nutrient.name }}: {{ nutrient.value }}{{ nutrient.uom }}
                                         </li>
                                     </ul>
                                 </div>
@@ -86,8 +84,8 @@ const toggleModal = () => {
                                 data-bs-parent="#IngredientsAccordion">
                                 <div class="accordion-body">
                                     <ul>
-                                        <li v-for="[name, value] in Object.entries(menuItem.ingredients)" :key="name">
-                                        {{ name }}: {{ value }}
+                                        <li v-for="ingredient in menuItem.ingredients" :key="ingredient">
+                                            {{ ingredient }}
                                         </li>
                                     </ul>
                                 </div>
