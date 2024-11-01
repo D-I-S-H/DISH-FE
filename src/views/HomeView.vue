@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 const $toast = useToast();
 const menuItems = ref([]); // Menu items
 const locations = ref([]); // Locations
+const times = ref([]); // Times
 
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
@@ -39,11 +40,27 @@ const changeLocation = (location) => { // Update the selected location
 axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
   .then(response => {
     menuItems.value = response.data;
+
+    // Set times from response data
+    times.value = response.data.reduce((acc, item) => {
+      if (!acc.includes(item.time)) {
+        acc.push(item.time);
+      }
+      return acc;
+    }, []);
   })
   .catch(error => {
     console.error('Error fetching menu items:', error);
     $toast.error('Error fetching menu items');
   });
+
+  // Selected time
+
+
+  console.log('Menu items:', toRaw(menuItems)); // Debug
+  console.log('Locations:', toRaw(locations)); // Debug
+  console.log('Selected location:', selectedLocation.value); // Debug
+  console.log('Times', toRaw(times)); // Debug
 
 </script>
 
@@ -51,6 +68,20 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
   <div class="container mt-5">
     <div class="row">
       <div class="col-lg-8 mb-3">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+              <button 
+                v-for="time in times" 
+                :key="time" 
+                class="btn btn-primary"
+                @click="changeTime"
+              >
+                {{ time }}
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Menu</h5>
@@ -99,7 +130,6 @@ export default {
   methods: {
     changeLocation(location) {
       selectedLocation = location;
-      console.log('Selected location:', location); // Debug
     }
   }
 }

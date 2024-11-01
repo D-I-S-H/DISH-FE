@@ -11,7 +11,6 @@ const showModal = ref(false);
 
 // Function to toggle modal
 const toggleModal = () => {
-    console.log('Toggling modal');
     showModal.value = !showModal.value;
 };
 </script>
