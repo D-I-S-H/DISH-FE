@@ -15,6 +15,10 @@ const times = ref([]); // Times
 const selectedLocation = ref(localStorage.getItem('selectedLocation') || locations.value[0]);
 const selectedTime = ref(null); // Selected time
 
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = 10;
+
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
   .then(response => {
@@ -29,6 +33,9 @@ axios.get(`${API_URL}/locations`)
 const changeLocation = (location) => {
   selectedLocation.value = location;
   localStorage.setItem('selectedLocation', location);
+
+  // Reset pagination
+  currentPage.value = 1;
 
   // Fetch menu items for the selected location
   axios.get(`${API_URL}/menu?location=${location}`)
@@ -80,12 +87,31 @@ axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
 // Change selected time
 const changeTime = (time) => {
   selectedTime.value = time;
+
+  // Reset pagination
+  currentPage.value = 1;
 };
 
-// Filter menu items
+// Filter and paginate menu items
 const filteredMenuItems = computed(() => {
   return menuItems.value.filter(item => item.time === selectedTime.value);
 });
+
+const paginatedMenuItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredMenuItems.value.slice(start, end);
+});
+
+// Calculate total pages
+const totalPages = computed(() => Math.ceil(filteredMenuItems.value.length / itemsPerPage));
+
+// Change page
+const changePage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+};
 </script>
 
 <template>
@@ -107,19 +133,42 @@ const filteredMenuItems = computed(() => {
             </div>
           </div>
         </div>
+        
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Menu</h5>
             <p class="card-text">Select a menu item to view more details.</p>
             <div class="row row-cols-1 row-cols-md-2 g-4">
               <div 
-                v-for="menuItem in filteredMenuItems" 
+                v-for="menuItem in paginatedMenuItems" 
                 :key="menuItem.id" 
                 class="col"
               >
                 <MenuItemComponent :menuItem="menuItem" />
               </div>
             </div>
+            <nav v-if="totalPages > 1" aria-label="Page navigation">
+              <ul class="pagination justify-content-center mt-3">
+                <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                  <a class="page-link" href="#" aria-label="Previous" @click.prevent="changePage(currentPage - 1)">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li 
+                  class="page-item" 
+                  :class="{ 'active': page === currentPage }" 
+                  v-for="page in totalPages" 
+                  :key="page"
+                >
+                  <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                  <a class="page-link" href="#" aria-label="Next" @click.prevent="changePage(currentPage + 1)">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
@@ -157,7 +206,11 @@ export default {
       times, 
       selectedTime, 
       changeTime, 
-      filteredMenuItems 
+      filteredMenuItems, 
+      paginatedMenuItems, 
+      currentPage, 
+      totalPages, 
+      changePage 
     };
   }
 };
