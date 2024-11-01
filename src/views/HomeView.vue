@@ -19,6 +19,9 @@ const selectedTime = ref(null); // Selected time
 const currentPage = ref(1);
 const itemsPerPage = 10;
 
+// Search state
+const searchQuery = ref(''); // Search query
+
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
   .then(response => {
@@ -34,8 +37,9 @@ const changeLocation = (location) => {
   selectedLocation.value = location;
   localStorage.setItem('selectedLocation', location);
 
-  // Reset pagination
+  // Reset pagination and search
   currentPage.value = 1;
+  searchQuery.value = '';
 
   // Fetch menu items for the selected location
   axios.get(`${API_URL}/menu?location=${location}`)
@@ -92,10 +96,15 @@ const changeTime = (time) => {
   currentPage.value = 1;
 };
 
-// Filter and paginate menu items
 const filteredMenuItems = computed(() => {
-  return menuItems.value.filter(item => item.time === selectedTime.value);
+  return menuItems.value
+    .filter(item => item.time === selectedTime.value)
+    .filter(item => 
+      (item.name.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+      ((item.description || '').toLowerCase().includes(searchQuery.value.toLowerCase()))
+    );
 });
+
 
 const paginatedMenuItems = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -136,8 +145,22 @@ const changePage = (page) => {
         
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Menu</h5>
-            <p class="card-text">Select a menu item to view more details.</p>
+            <div class="row mb-3">
+              <div class="col-12 col-md-6 mb-2 mb-md-0">
+                <h5 class="card-title mb-2">Menu</h5>
+                <p class="card-text">Select a menu item to view more details.</p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="d-flex justify-content-end">
+                  <input 
+                    type="text" 
+                    class="form-control border-secondary"
+                    placeholder="Search menu items..." 
+                    v-model="searchQuery" 
+                  />
+                </div>  
+              </div>
+            </div>
             <div class="row row-cols-1 row-cols-md-2 g-4">
               <div 
                 v-for="menuItem in paginatedMenuItems" 
@@ -206,6 +229,7 @@ export default {
       times, 
       selectedTime, 
       changeTime, 
+      searchQuery,
       filteredMenuItems, 
       paginatedMenuItems, 
       currentPage, 
