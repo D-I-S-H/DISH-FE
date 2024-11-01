@@ -42,9 +42,9 @@ a.text-light:hover {
 .list-group {
   --bs-list-group-border-color: var(--color-secondary);
 }
-.list-group-item.active {
+.button-location.active, .btn-active, .btn-active:focus {
   background-color: var(--color-secondary);
-  border-color: var(--color-accent);
+  border: 1px solid var(--color-accent);
 }
 
 .button-location:hover {

@@ -86,7 +86,6 @@ const changeTime = (time) => {
 const filteredMenuItems = computed(() => {
   return menuItems.value.filter(item => item.time === selectedTime.value);
 });
-
 </script>
 
 <template>
@@ -99,8 +98,8 @@ const filteredMenuItems = computed(() => {
               <button 
                 v-for="time in times" 
                 :key="time" 
-                class="btn" 
-                :class="{'btn-primary': time === selectedTime, 'btn-secondary': time !== selectedTime}"
+                class="btn"
+                :class="{'btn-active': time === selectedTime}"
                 @click="changeTime(time)"
               >
                 {{ time }}
@@ -133,7 +132,7 @@ const filteredMenuItems = computed(() => {
               <li 
                 v-for="location in locations" 
                 :key="location" 
-                :class="['list-group-item', 'button-location', {'active': selectedLocation.value === location}]"
+                :class="['list-group-item', 'button-location', {'active': selectedLocation === location}]"
                 @click="changeLocation(location)"
               >
                 {{ location }}
