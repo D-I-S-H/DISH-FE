@@ -1,18 +1,21 @@
 <script setup>
-import { ref } from 'vue';
-const props = defineProps({
-    menuItem: {
-        type: Object,
-        required: true
-    }
-});
-// Modal visibility state
-const showModal = ref(false);
+    import { ref } from 'vue';
+    const props = defineProps({
+        menuItem: {
+            type: Object,
+            required: true
+        }
+    });
+    // Modal visibility state
+    const showModal = ref(false);
+    
+    // Function to toggle modal
+    const toggleModal = () => {
+        console.log('Toggling modal');
+        showModal.value = !showModal.value;
+    };
+    const API_URL = import.meta.env.VITE_APP_API_URL;
 
-// Function to toggle modal
-const toggleModal = () => {
-    showModal.value = !showModal.value;
-};
 </script>
 <template>
     <div class="card menu-item" @click="toggleModal">
@@ -54,9 +57,9 @@ const toggleModal = () => {
                                 data-bs-parent="#nutritionAccordion">
                                 <div class="accordion-body">
                                     <ul>
-                                        <li v-for="(nutrient, index) in menuItem.nutrients" :key="index">
-                                            {{ nutrient.name }}: {{ nutrient.value }}
-                                            <span v-if="nutrient.value !== 'less than 1 gram'">{{ nutrient.uom }}</span>
+                                        <li>Calories: {{ menuItem.calories }}</li>
+                                        <li v-for="[name, value] in Object.entries(menuItem.nutrients)" :key="name">
+                                        {{ name }}: {{ value }}
                                         </li>
                                     </ul>
                                 </div>
@@ -85,8 +88,8 @@ const toggleModal = () => {
                                 data-bs-parent="#IngredientsAccordion">
                                 <div class="accordion-body">
                                     <ul>
-                                        <li v-for="ingredient in menuItem.ingredients" :key="ingredient">
-                                            {{ ingredient }}
+                                        <li v-for="[name, value] in Object.entries(menuItem.ingredients)" :key="name">
+                                        {{ name }}: {{ value }}
                                         </li>
                                     </ul>
                                 </div>
@@ -125,9 +128,68 @@ const toggleModal = () => {
                     </div>
                 </div>                
                 <div class="modal-footer">
+                    <!--     
+                    BUTTONS GO HERE!
+                    
+                    -->
+                    <div class="container mt-5">
+                        <h2>Rate this dish</h2>
+                        <div class = "text-left">
+                            <button class="btn btn-outline-warning" onclick="rate(1)">
+                                <i class="fas fa-star"></i>
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="rate(2)">
+                                <i class="fas fa-star"></i>
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="rate(3)">
+                                <i class="fas fa-star"></i>
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="rate(4)">
+                                <i class="fas fa-star"></i>
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="rate(5)">
+                                <i class="fas fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+
+
                     <button type="button" class="btn btn-secondary" @click="toggleModal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      uid: '',
+      stars: null,
+      responseMessage: '',
+    };
+  },
+  methods: {
+    // Reusable function to send POST request
+    async rate(stars) {
+        const uid = localStorage.getItem('uid');
+      try {
+        const response = await axios.post(API_URL, {
+          uid,
+          stars,
+          name : menuItem.name,
+          location : menuItem.location
+        });
+        this.responseMessage = `Response: ${response.data}`;
+      } catch (error) {
+        console.error('Error sending POST request:', error);
+        this.responseMessage = 'Error sending request';
+      }
+    },
+    
+    
+  },
+};
+</script>
