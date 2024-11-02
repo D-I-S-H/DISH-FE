@@ -168,6 +168,8 @@ export default {
     return {
       uid: '',
       stars: null,
+        name: null,
+        location: null,
       responseMessage: '',
     };
   },
