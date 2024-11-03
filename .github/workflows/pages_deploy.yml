@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -29,15 +28,10 @@ jobs:
     - name: Set .env params
       run: |
         echo "VITE_APP_API_URL=https://dishapi-cuczdxckhdh4caev.eastus-01.azurewebsites.net/" > .env
-
-    - name: Configure base URL for GitHub Pages
-      run: echo "VITE_APP_PUBLIC_PATH='/'" >> .env
+        echo "VITE_APP_BASE_PATH=/DISH-FE/"
 
     - name: Build the Vue.js app
       run: npm run build
-
-    - name: Add CNAME file
-      run: echo "d-i-s-h.github.io" > dist/CNAME
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
