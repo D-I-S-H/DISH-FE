@@ -36,6 +36,9 @@ jobs:
     - name: Build the Vue.js app
       run: npm run build
 
+    - name: Add CNAME file
+      run: echo "d-i-s-h.github.io" > dist/CNAME
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
