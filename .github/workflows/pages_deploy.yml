@@ -26,16 +26,19 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build the Vue.js app
-      run: npm run build
-
     - name: Set .env params
       run: |
         echo "VITE_APP_API_URL=https://dishapi-cuczdxckhdh4caev.eastus-01.azurewebsites.net/" > .env
+
+    - name: Configure base URL for GitHub Pages
+      run: echo "VITE_APP_PUBLIC_PATH='/'" >> .env
+
+    - name: Build the Vue.js app
+      run: npm run build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist  # Deploys the entire dist folder to the root of gh-pages
+        publish_dir: ./dist
         publish_branch: gh-pages
