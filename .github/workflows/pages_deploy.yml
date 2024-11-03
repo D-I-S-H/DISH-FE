@@ -28,7 +28,7 @@ jobs:
     - name: Set .env params
       run: |
         echo "VITE_APP_API_URL=https://dishapi-cuczdxckhdh4caev.eastus-01.azurewebsites.net/" > .env
-        echo "VITE_APP_BASE_PATH=/DISH-FE/"
+        echo "VITE_APP_BASE_PATH=/DISH-FE/" > .env
 
     - name: Build the Vue.js app
       run: npm run build
