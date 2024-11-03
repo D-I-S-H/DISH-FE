@@ -36,7 +36,7 @@ jobs:
     - name: Deploy to d-i-s-h.github.io
       uses: peaceiris/actions-gh-pages@v3
       with:
-        token: ${{ secrets.DEPLOY_TOKEN }}
+        personal_token: ${{ secrets.DEPLOY_TOKEN }}
         publish_dir: ./dist
         external_repository: d-i-s-h/d-i-s-h.github.io
         publish_branch: main
