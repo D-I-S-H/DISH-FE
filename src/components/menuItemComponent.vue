@@ -156,3 +156,36 @@ const toggleModal = () => {
         </div>
     </div>
 </template>
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      uid: '',
+      stars: null,
+      responseMessage: '',
+    };
+  },
+  methods: {
+    // Reusable function to send POST request
+    async rate(stars) {
+        const uid = localStorage.getItem('uid');
+      try {
+        const response = await axios.post(API_URL, {
+          uid,
+          stars,
+          name : menuItem.name,
+          location : menuItem.location
+        });
+        this.responseMessage = `Response: ${response.data}`;
+      } catch (error) {
+        console.error('Error sending POST request:', error);
+        this.responseMessage = 'Error sending request';
+      }
+    },
+    
+    
+  },
+};
+</script>
