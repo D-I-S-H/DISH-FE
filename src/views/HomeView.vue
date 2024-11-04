@@ -27,6 +27,12 @@ const searchQuery = ref(''); // Search query
 axios.get(`${API_URL}/locations`)
   .then(response => {
     locations.value = response.data;
+    
+    // Set selectedLocation to the first location if not already set in localStorage
+    if (!localStorage.getItem('selectedLocation') && locations.value.length > 0) {
+      selectedLocation.value = locations.value[0];
+      localStorage.setItem('selectedLocation', selectedLocation.value);
+    }
   })
   .catch(error => {
     console.error('Error fetching locations:', error);
