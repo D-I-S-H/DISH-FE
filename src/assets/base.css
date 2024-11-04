@@ -9,6 +9,7 @@
   --color-dark: #141310;
   --color-dark-hover: #1e1c18;
   --color-dark-items: #42566c57;
+  --color-dark-items-secondary: #2c3745;
   /*Light Colors*/
   --background-light: #ced4de;
   --color-light: #f4f4f1;
@@ -27,12 +28,16 @@
     --bs-body-color: var(--color-light);
     --bs-card-bg: var(--color-dark-items);
     --bs-body-bg: var(--color-dark-items);
+    --modal-bg: var(--color-dark-items-secondary);
 
     --bs-navbar-color: var(--color-light);
     --bs-nav-link-color: var(--color-light);
     --bs-nav-link-hover-color: var(--color-primary);
     --navbar-bg: var(--color-dark-items);
     --bs-secondary-color: var(--color-accent);
+
+    --bs-accordion-active-color: var(--color-light)!important;
+    --bs-accordion-active-bg: var(--color-secondary)!important;
   }
 }
 @media (prefers-color-scheme: light) {

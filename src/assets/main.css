@@ -4,7 +4,7 @@
   background-color: var(--navbar-bg);
 } */
 .nav-link, .navbar-brand {
-  color: var(--color-light);
+  color: var(--color-text);
 }
 .nav-link:hover, .navbar-brand:hover, .nav-link:focus, .navbar-brand:focus, .nav-link:active, .navbar-brand:active {
   color: var(--color-light-hover);
@@ -20,12 +20,12 @@ a.text-light:hover {
   color: var(--color-light-hover)!important;
 }
 .btn {
-  color: var(--color-light);
+  color: var(--color-text);
   background-color: var(--color-secondary);
   border-color: var(--color-secondary);
 }
 .btn:hover, .btn:focus, .btn:active, .btn:first-child:active, .btn.show {
-  color: var(--color-light);
+  color: var(--color-text);
   background-color: var(--color-secondary-hover);
   border-color: var(--color-secondary-hover);
 }
@@ -37,18 +37,68 @@ a.text-light:hover {
 }
 .dropdown-item:focus, .dropdown-item:hover {
   background-color: var(--color-secondary);
-  color: var(--color-light);
+  color: var(--color-text);
 }
 .list-group {
   --bs-list-group-border-color: var(--color-secondary);
 }
-.list-group-item.active {
+.button-location.active, .btn-active, .btn-active:focus {
   background-color: var(--color-secondary);
-  border-color: var(--color-accent);
+  border: 1px solid var(--color-accent);
 }
 
 .button-location:hover {
   background-color: var(--color-secondary);
-  color: var(--color-light);
+  color: var(--color-text);
   cursor: pointer;
+}
+.accordion-button:not(.collapsed) {
+  color: var(--color-text);
+  background-color: var(--color-secondary);
+}
+
+.menu-item {
+  cursor: pointer;
+}
+.menu-item:hover {
+  background-color: var(--color-secondary);
+}
+
+.modal {
+  --bs-modal-bg: var(--modal-bg);
+}
+
+.pagination {
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.page-item {
+  font-weight: bold;
+}
+
+.page-item .page-link {
+  color: var(--color-text);
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.page-item .page-link:hover,
+.page-item .page-link:focus {
+  color: var(--color-text);
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+}
+
+.page-item.active .page-link {
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-accent);
+}
+
+.page-item .page-link:active {
+  background-color: var(--color-secondary-hover);
+  color: var(--color-text);
+  border-color: var(--color-secondary-hover);
 }
