@@ -34,6 +34,7 @@ const toggleModal = () => {
                 </div>
                 <div class="modal-body">
                     <p>{{ menuItem.description }}</p>
+                    <p>Serving size: {{ menuItem.portion }}</p>
                     <div class="accordion" id="nutritionAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
