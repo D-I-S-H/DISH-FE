@@ -126,6 +126,30 @@ const toggleModal = () => {
                     </div>
                 </div>                
                 <div class="modal-footer">
+                    <!--     
+                        BUTTONS GO HERE!
+
+                        -->
+                        <div class="container mt-5">
+                            <h2>Rate this dish</h2>
+                            <div class = "text-left">
+                                <button class="btn btn-outline-warning" onclick="rate(1)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="btn btn-outline-warning" onclick="rate(2)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="btn btn-outline-warning" onclick="rate(3)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="btn btn-outline-warning" onclick="rate(4)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="btn btn-outline-warning" onclick="rate(5)">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
                     <button type="button" class="btn btn-secondary" @click="toggleModal">Close</button>
                 </div>
             </div>
