@@ -5,6 +5,8 @@ import axios from 'axios';
 
 vi.mock('axios');
 
+const date = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+
 // Mock the environment variable for the API URL
 beforeAll(() => {
   process.env.VITE_APP_API_URL = 'http://localhost:8080';
@@ -94,7 +96,7 @@ describe('HomeView.vue', () => {
 
   // Check if menu was called
   it('calls the API to get the menu for the selected location', () => {
-    expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/menu?location=Location 1');
+    expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/menu?location=Location 1&date=' + date);
   });
 
 
