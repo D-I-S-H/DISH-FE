@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
+    
 const props = defineProps({
     menuItem: {
         type: Object,
@@ -8,12 +10,41 @@ const props = defineProps({
 });
 // Modal visibility state
 const showModal = ref(false);
-
+const stars = ref(null);
+const responseMessage = ref('');
+const API_URL = '/rating'; // Update as needed
 // Function to toggle modal
 const toggleModal = () => {
     showModal.value = !showModal.value;
 };
+    
+
+
+// Function to send POST request for rating
+const rate = async (starCount) => {
+    const uid = localStorage.getItem('uid'); // Retrieve uid from localStorage
+    if (!uid) {
+        responseMessage.value = 'User ID not found.';
+        return;
+    }
+
+    try {
+        const response = await axios.post(API_URL, null, {
+            params: {
+                uid,
+                stars: starCount,
+                name: props.menuItem.name,
+                location: props.menuItem.location,
+            },
+        });
+        responseMessage.value = `Response: ${response.data}`;
+    } catch (error) {
+        console.error('Error sending POST request:', error);
+        responseMessage.value = 'Error sending request';
+    }
+};
 </script>
+
 <template>
     <div class="card menu-item" @click="toggleModal">
         <div class="card-body">
@@ -133,20 +164,8 @@ const toggleModal = () => {
                         <div class="container mt-5">
                             <h2>Rate this dish</h2>
                             <div class = "text-left">
-                                <button class="btn btn-outline-warning" onclick="rate(1)">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                                <button class="btn btn-outline-warning" onclick="rate(2)">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                                <button class="btn btn-outline-warning" onclick="rate(3)">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                                <button class="btn btn-outline-warning" onclick="rate(4)">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                                <button class="btn btn-outline-warning" onclick="rate(5)">
-                                    <i class="fas fa-star"></i>
+                                <button v-for="i in 5" :key="i" class="btn btn-outline-warning" @click="rate(i)">
+                                    <i class="fas fa-star"></i> {{ i }}
                                 </button>
                             </div>
                         </div>
@@ -156,36 +175,4 @@ const toggleModal = () => {
         </div>
     </div>
 </template>
-<script>
-import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      uid: '',
-      stars: null,
-      responseMessage: '',
-    };
-  },
-  methods: {
-    // Reusable function to send POST request
-    async rate(stars) {
-        const uid = localStorage.getItem('uid');
-      try {
-        const response = await axios.post(API_URL, {
-          uid,
-          stars,
-          name : menuItem.name,
-          location : menuItem.location
-        });
-        this.responseMessage = `Response: ${response.data}`;
-      } catch (error) {
-        console.error('Error sending POST request:', error);
-        this.responseMessage = 'Error sending request';
-      }
-    },
-    
-    
-  },
-};
-</script>
