@@ -15,6 +15,7 @@ const loading = ref(true); // Loading state for menu items
 
 const selectedLocation = ref(localStorage.getItem('selectedLocation') || locations.value[0]);
 const selectedTime = ref(null); // Selected time
+const selectedDate = ref(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })); // YYYY-MM-DD
 
 // Pagination state
 const currentPage = ref(1);
@@ -49,8 +50,9 @@ const changeLocation = (location) => {
   searchQuery.value = '';
   loading.value = true; // Set loading to true before fetching
 
-  // Fetch menu items for the selected location
-  axios.get(`${API_URL}/menu?location=${location}`)
+
+  // Fetch menu items for the selected location and date
+  axios.get(`${API_URL}/menu?location=${location}&date=${selectedDate.value}`)
     .then(response => {
       menuItems.value = response.data;
 
@@ -76,8 +78,8 @@ const changeLocation = (location) => {
     });
 }
 
-// Fetch menu items for the initially selected location
-axios.get(`${API_URL}/menu?location=${selectedLocation.value}`)
+// Fetch menu items for the initially selected location and date
+axios.get(`${API_URL}/menu?location=${selectedLocation.value}&date=${selectedDate.value}`)
   .then(response => {
     menuItems.value = response.data;
 
@@ -118,6 +120,20 @@ const filteredMenuItems = computed(() => {
       ((item.description || '').toLowerCase().includes(searchQuery.value.toLowerCase()))
     );
 });
+
+const paginationPages = computed(() => {
+  const pages = [];
+  const range = 2; // Number of pages to display before and after the current page
+
+  for (let i = currentPage.value - range; i <= currentPage.value + range; i++) {
+    if (i > 0 && i <= totalPages.value) {
+      pages.push(i);
+    }
+  }
+
+  return pages;
+});
+
 
 const paginatedMenuItems = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -196,13 +212,23 @@ const changePage = (page) => {
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
-                  <li 
-                    class="page-item" 
-                    :class="{ 'active': page === currentPage }" 
-                    v-for="page in totalPages" 
-                    :key="page"
-                  >
+                  <li class="page-item" v-if="currentPage > 3">
+                    <a class="page-link" href="#" @click.prevent="changePage(1)">1</a>
+                  </li>
+                  <li class="page-item" v-if="currentPage > 4">
+                    <span class="page-link">...</span>
+                  </li>
+                  <li class="page-item" 
+                      v-for="page in paginationPages" 
+                      :key="page" 
+                      :class="{ 'active': page === currentPage }">
                     <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                  </li>
+                  <li class="page-item" v-if="currentPage < totalPages - 3">
+                    <span class="page-link">...</span>
+                  </li>
+                  <li class="page-item" v-if="currentPage < totalPages - 2">
+                    <a class="page-link" href="#" @click.prevent="changePage(totalPages)">{{ totalPages }}</a>
                   </li>
                   <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
                     <a class="page-link" href="#" aria-label="Next" @click.prevent="changePage(currentPage + 1)">
