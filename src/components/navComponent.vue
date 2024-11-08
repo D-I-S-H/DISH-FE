@@ -1,6 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faBars, faHouse, faQuestion, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'; // Added sign out icon
+import { faBars, faHouse, faQuestion, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
