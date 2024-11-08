@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import MenuItemComponent from '../components/menuItemComponent.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const $toast = useToast();
@@ -17,12 +19,15 @@ const selectedLocation = ref(localStorage.getItem('selectedLocation') || locatio
 const selectedTime = ref(null); // Selected time
 const selectedDate = ref(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })); // YYYY-MM-DD
 
+
 // Pagination state
 const currentPage = ref(1);
 const itemsPerPage = 10;
 
 // Search state
 const searchQuery = ref(''); // Search query
+const selectedLabels = ref([]); // Selected labels for filtering
+const showFilters = ref(false); // Toggle state for filters
 
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
@@ -112,43 +117,54 @@ const changeTime = (time) => {
   currentPage.value = 1;
 };
 
+const uniqueLabels = computed(() => {
+  return [...new Set(menuItems.value.flatMap(item => item.labels || []))];
+});
+
+// Filter items based on selected time, search query, and labels
 const filteredMenuItems = computed(() => {
   return menuItems.value
     .filter(item => item.time === selectedTime.value)
     .filter(item => 
-      (item.name.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+      item.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       ((item.description || '').toLowerCase().includes(searchQuery.value.toLowerCase()))
+    )
+    .filter(item =>
+      // Check if item.labels contains all selected labels
+      selectedLabels.value.length === 0 || selectedLabels.value.every(label => (item.labels || []).includes(label))
     );
 });
 
+
 const paginationPages = computed(() => {
   const pages = [];
-  const range = 2; // Number of pages to display before and after the current page
+  const range = 2;
 
   for (let i = currentPage.value - range; i <= currentPage.value + range; i++) {
     if (i > 0 && i <= totalPages.value) {
       pages.push(i);
     }
   }
-
   return pages;
 });
 
-
 const paginatedMenuItems = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredMenuItems.value.slice(start, end);
+  return filteredMenuItems.value.slice(start, start + itemsPerPage);
 });
 
-// Calculate total pages
 const totalPages = computed(() => Math.ceil(filteredMenuItems.value.length / itemsPerPage));
 
-// Change page
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
   }
+};
+
+const toggleLabel = (label) => {
+  const index = selectedLabels.value.indexOf(label);
+  if (index === -1) selectedLabels.value.push(label);
+  else selectedLabels.value.splice(index, 1);
 };
 </script>
 
@@ -156,9 +172,11 @@ const changePage = (page) => {
   <div class="container mt-5">
     <div class="row">
       <div class="col-lg-8 mb-3">
+        <!-- Filters card -->
         <div class="card mb-3">
           <div class="card-body">
-            <div class="d-flex flex-wrap gap-2">
+            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center justify-content-md-start">
+              <!-- Time select -->
               <button 
                 v-for="time in times" 
                 :key="time" 
@@ -168,10 +186,36 @@ const changePage = (page) => {
               >
                 {{ time }}
               </button>
+              
+              <!-- Filter button -->
+              <button 
+                class="btn btn-secondary ms-md-auto" 
+                @click="showFilters = !showFilters"
+              >
+                <font-awesome-icon :icon="faFilter" />
+                {{ showFilters ? 'Hide Filters' : 'Filters' }}
+              </button>
+            </div>
+            
+            <!-- Filters -->
+            <div v-if="showFilters" class="mt-3">
+              <h6>Filter by Labels</h6>
+              <div v-for="label in uniqueLabels" :key="label" class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  :value="label" 
+                  v-model="selectedLabels"
+                >
+                <label class="form-check-label">
+                  {{ label }}
+                </label>
+              </div>
             </div>
           </div>
         </div>
-        
+
+        <!-- Menu card -->
         <div class="card">
           <div class="card-body">
             <div v-if="loading" class="text-center py-5">
@@ -197,6 +241,7 @@ const changePage = (page) => {
                 </div>
               </div>
               <div class="row row-cols-1 row-cols-md-2 g-4">
+                <!-- Generate MenuItemComponents for each menu item -->
                 <div 
                   v-for="menuItem in paginatedMenuItems" 
                   :key="menuItem.id" 
@@ -205,6 +250,7 @@ const changePage = (page) => {
                   <MenuItemComponent :menuItem="menuItem" />
                 </div>
               </div>
+              <!-- Pagination -->
               <nav v-if="totalPages > 1" aria-label="Page navigation">
                 <ul class="pagination justify-content-center mt-3">
                   <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
@@ -241,7 +287,7 @@ const changePage = (page) => {
           </div>
         </div>
       </div>
-      
+      <!-- Location select -->
       <div class="col-lg-4 mb-3">
         <div class="card">
           <div class="card-body">
@@ -276,12 +322,15 @@ export default {
       selectedTime, 
       changeTime, 
       searchQuery,
+      selectedLabels,
       filteredMenuItems, 
       paginatedMenuItems, 
       currentPage, 
       totalPages, 
       changePage, 
-      loading 
+      loading,
+      uniqueLabels,
+      toggleLabel 
     };
   }
 };
