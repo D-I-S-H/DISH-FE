@@ -1,4 +1,7 @@
 <script setup>
+import { FontAwesomeIcon,  } from '@fortawesome/vue-fontawesome';
+import { faSeedling, faCarrot, faBreadSlice, faDumbbell} from '@fortawesome/free-solid-svg-icons';
+
 import { ref } from 'vue';
 const props = defineProps({
     menuItem: {
@@ -19,9 +22,38 @@ const toggleModal = () => {
         <div class="card-body">
             <h5 class="card-title">{{ menuItem.name }}</h5>
             <p class="card-text">{{ menuItem.description }}</p>
-            <span class="text-muted">
-                {{ menuItem.calories }} Calories
-            </span>
+            <div class="d-flex gap-2">
+                <span class="text-muted">
+                    {{ menuItem.calories }} Calories
+                </span>
+                <span v-if="menuItem.labels.length > 0" class="d-flex align-items-center gap-2">
+                    <FontAwesomeIcon 
+                        v-if="menuItem.labels.includes('Vegetarian')"
+                        :icon="faSeedling"
+                        class="text-success"
+                        title="Vegetarian"
+                    />
+                    <FontAwesomeIcon
+                        v-if="menuItem.labels.includes('Vegan')"
+                        :icon="faCarrot"
+                        class="text-success"
+                        title="Vegan"
+                    />
+                    <span
+                        v-if="menuItem.labels.includes('Avoiding Gluten')"
+                        class="text-success"
+                        title="Gluten Free"
+                        >
+                        GF
+                    </span>
+                    <FontAwesomeIcon
+                        v-if="menuItem.labels.includes('Good Source of Protein')"
+                        :icon="faDumbbell"
+                        class="text-success"
+                        title="Good Source of Protein"
+                    />
+                </span>
+            </div>
         </div>
     </div>
 
@@ -35,6 +67,41 @@ const toggleModal = () => {
                 <div class="modal-body">
                     <p>{{ menuItem.description }}</p>
                     <p>Serving size: {{ menuItem.portion }}</p>
+                    <div v-if="menuItem.labels.length > 0" class="col d-flex flex-column gap-2 mb-1">
+                        <span v-if="menuItem.labels.includes('Vegetarian')">
+                            <FontAwesomeIcon 
+                                :icon="faSeedling"
+                                class="text-success"
+                                title="Vegetarian"
+                            />
+                            - Vegetarian
+                        </span>
+                        <span v-if="menuItem.labels.includes('Vegan')">
+                            <FontAwesomeIcon
+                                :icon="faCarrot"
+                                class="text-success"
+                                title="Vegan"
+                            />
+                            - Vegan
+                        </span>
+                        <span v-if="menuItem.labels.includes('Avoiding Gluten')">
+                            <span
+                                class="text-success"
+                                title="Gluten Free"
+                                >
+                                GF
+                            </span>
+                            - Gluten Free
+                        </span>
+                        <span v-if="menuItem.labels.includes('Good Source of Protein')">
+                            <FontAwesomeIcon
+                                :icon="faDumbbell"
+                                class="text-success"
+                                title="Good Source of Protein"
+                            />
+                            - Good Source of Protein
+                        </span>
+                    </div>
                     <div class="accordion" id="nutritionAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
