@@ -29,6 +29,10 @@ const searchQuery = ref(''); // Search query
 const selectedLabels = ref([]); // Selected labels for filtering
 const showFilters = ref(false); // Toggle state for filters
 
+// Custom tag filter state
+const excludeTags = ref([]); // List of tags to exclude
+const tagInput = ref(''); // Input field for new tag
+
 // Fetch locations from the API
 axios.get(`${API_URL}/locations`)
   .then(response => {
@@ -121,7 +125,21 @@ const uniqueLabels = computed(() => {
   return [...new Set(menuItems.value.flatMap(item => item.labels || []))];
 });
 
-// Filter items based on selected time, search query, and labels
+// Add new tag to excludeTags when pressing Enter
+const addTag = () => {
+  const tag = tagInput.value.trim();
+  if (tag && !excludeTags.value.includes(tag)) {
+    excludeTags.value.push(tag);
+  }
+  tagInput.value = ''; // Clear input after adding the tag
+};
+
+// Remove a tag from excludeTags
+const removeTag = (tag) => {
+  excludeTags.value = excludeTags.value.filter(t => t !== tag);
+};
+
+// Filter menu items based on selectedTime, searchQuery, selectedLabels, and excludeTags
 const filteredMenuItems = computed(() => {
   return menuItems.value
     .filter(item => item.time === selectedTime.value)
@@ -132,8 +150,21 @@ const filteredMenuItems = computed(() => {
     .filter(item =>
       // Check if item.labels contains all selected labels
       selectedLabels.value.length === 0 || selectedLabels.value.every(label => (item.labels || []).includes(label))
+    )
+    .filter(item =>
+      // Exclude items that have any of the tags in excludeTags in either ingredients or allergens, case-insensitively and ignoring trailing asterisks
+      excludeTags.value.length === 0 || !excludeTags.value.some(tag => {
+        const lowercaseTag = tag.toLowerCase();
+        
+        // Normalize ingredients and allergens by removing trailing asterisk and converting to lowercase
+        const ingredients = (item.ingredients || []).map(i => i.toLowerCase().replace(/\*$/, ''));
+        const allergens = (item.allergens || []).map(a => a.toLowerCase().replace(/\*$/, ''));
+        
+        return ingredients.includes(lowercaseTag) || allergens.includes(lowercaseTag);
+      })
     );
 });
+
 
 
 const paginationPages = computed(() => {
@@ -196,7 +227,6 @@ const toggleLabel = (label) => {
                 {{ showFilters ? 'Hide Filters' : 'Filters' }}
               </button>
             </div>
-            
             <!-- Filters -->
             <div v-if="showFilters" class="mt-3">
               <h6>Filter by Labels</h6>
@@ -210,6 +240,27 @@ const toggleLabel = (label) => {
                 <label class="form-check-label">
                   {{ label }}
                 </label>
+              </div>
+              <!-- Exclude Tag Filter -->
+              <h6 class="mt-3">Exclude Ingredients/Allergens</h6>
+              <div class="d-flex gap-2 mb-3">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Type a tag and press Enter" 
+                  v-model="tagInput"
+                  @keyup.enter="addTag"
+                />
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <span 
+                  v-for="tag in excludeTags" 
+                  :key="tag" 
+                  class="badge bg-danger exclude-tag"
+                  @click="removeTag(tag)"
+                >
+                  {{ tag }} <font-awesome-icon :icon="faTimes" />
+                </span>
               </div>
             </div>
           </div>

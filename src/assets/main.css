@@ -102,3 +102,13 @@ a.text-light:hover {
   color: var(--color-text);
   border-color: var(--color-secondary-hover);
 }
+
+.exclude-tag {
+  max-width: 10em; /* Adjust width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
