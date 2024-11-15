@@ -1,6 +1,15 @@
-# DISH-FE
+<div align="center">
+  <h1>D.I.S.H Frontend</h1>
+  <h2>Dining Information Served Here</h2>
+  <p>
+    <img src="https://raw.githubusercontent.com/D-I-S-H/.github/refs/heads/main/forkwithplate.svg" width="200" />
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Vue%20js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D" />
+    
+  </p>
+</div>
 
-Frontend for the DISH (Dining Information Served Here) project.
 
 This project retrieves information from the [DISH API](https://github.com/D-I-S-H/DISH-API) in order to create faster and better looking menus for universities using [dineoncampus](https://dineoncampus.com/).
 
