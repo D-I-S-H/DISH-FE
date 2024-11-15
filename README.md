@@ -2,6 +2,8 @@
 
 Frontend for the DISH (Dining Information Served Here) project.
 
+This project retrieves information from the [DISH API](https://github.com/D-I-S-H/DISH-API) in order to create faster and better looking menus for universities using [dineoncampus](https://dineoncampus.com/).
+
 ## Project Setup
 
 ```sh
