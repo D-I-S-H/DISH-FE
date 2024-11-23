@@ -1,8 +1,12 @@
 @import "./base.css";
 
-/* nav {
-  background-color: var(--navbar-bg);
-} */
+a {
+  color: var(--color-link);
+}
+a:hover {
+  color: var(--color-link-hover);
+}
+
 .nav-link, .navbar-brand {
   color: var(--color-text);
 }

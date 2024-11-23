@@ -13,7 +13,7 @@
   /*Light Colors*/
   --background-light: #ced4de;
   --color-light: #f4f4f1;
-  --color-light-hover: #d6d6d6;
+  --color-light-hover: #b7b7b7;
   --color-light-items: #d8d8d8;
   /*Bootstrap color overrides*/
   --bs-primary: var(--color-primary);
@@ -24,6 +24,8 @@
   :root {
     --color-background: var(--background-dark);
     --color-text: var(--color-light);
+    --color-link: var(--color-light);
+    --color-link-hover: var(--color-light-hover);
     /*Bootstrap color overrides*/
     --bs-body-color: var(--color-light);
     --bs-card-bg: var(--color-dark-items);
