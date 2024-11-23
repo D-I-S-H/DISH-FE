@@ -5,7 +5,7 @@ import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import MenuItemComponent from '../components/menuItemComponent.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faShopSlash } from '@fortawesome/free-solid-svg-icons';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const $toast = useToast();
@@ -274,7 +274,7 @@ const toggleLabel = (label) => {
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
-            <div v-else>
+            <div v-else-if="paginatedMenuItems.length > 0">
               <div class="row mb-3">
                 <div class="col-12 col-md-6 mb-2 mb-md-0">
                   <h5 class="card-title mb-2">Menu</h5>
@@ -334,6 +334,10 @@ const toggleLabel = (label) => {
                   </li>
                 </ul>
               </nav>
+            </div>
+            <div v-else class="w-100 text-center">
+                  <h4>This dining hall is closed today</h4>
+                  <FontAwesomeIcon :icon="faShopSlash" size="3x" />
             </div>
           </div>
         </div>
